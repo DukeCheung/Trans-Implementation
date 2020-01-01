@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import torch
-from code.utils.utils import CheckPath
+from codes.utils.utils import CheckPath
 
 class Config():
     def __init__(self):

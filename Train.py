@@ -8,10 +8,10 @@ import pickle
 import argparse
 import numpy as np
 from config import Config
-from code.utils import utils
-from code.models import TransE, TransH, TransA, TransD, KG2E
-from code.utils import evaluation
-from code.dataloader.dataloader import tripleDataset
+from codes.utils import utils
+from codes.models import TransE, TransH, TransA, TransD, KG2E
+from codes.utils import evaluation
+from codes.dataloader.dataloader import tripleDataset
 from torch.utils.data import DataLoader
 
 from torch.autograd import Variable

@@ -3,7 +3,7 @@
 Filename : GenerateData.py
 '''
 
-from code.process.triples import csvToStandard, jsonToStandard, \
+from codes.process.triples import csvToStandard, jsonToStandard, \
                                 generateDict, splitData
 
 if __name__ == "__main__":
