@@ -299,14 +299,23 @@ class trainTriples():
 
 if __name__ == "__main__":
     # Print args
+    print('DEBUG ARGS1')
+    print(args)
     utils.printArgs(args)
-
+    print('DEBUG ARGS2')
     sumWriter = SummaryWriter(log_dir=args.summarydir)
+    print('DEBUG ARGS3')
     trainModel = trainTriples(args)
+    print('DEBUG ARGS4')
     trainModel.prepareData()
+    print('DEBUG ARGS5')
     trainModel.prepareModel()
+    print('DEBUG ARGS6')
     if args.loadembed:
         trainModel.loadPretrainEmbedding()
+        print('DEBUG ARG7')
+    print('DEBUG ARGS8')
     trainModel.fit()
+    print('DEBUG ARGS9')
 
     sumWriter.close()
