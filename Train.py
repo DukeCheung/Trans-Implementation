@@ -288,7 +288,8 @@ class trainTriples():
             '''
             pkl saving type dump a dict containing itos list and weights returned by model
             '''
-            pklPath = os.path.join(self.args.embedpath, "param_ent{}_rel{}_{}.pkl".format(getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"], self.model))
+            # pklPath = os.path.join(self.args.embedpath, "param_ent{}_rel{}_{}.pkl".format(getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"], self.model))
+            pklPath = os.path.join(self.args.embedpath, "param_ent{}_rel{}_{}.pkl".format(getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
             with codecs.open(pklPath, "wb") as fp:
                 pickle.dump({"entlist" : self.entityDict["itos"],
                              "rellist" : self.relationDict["itos"],
