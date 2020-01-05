@@ -218,7 +218,7 @@ class trainTriples():
 
                     # Normalize the embedding if neccessary
                     self.model.normalizeEmbedding()
-
+                    
                     # Calculate the loss from the model
                     loss = self.model(posX, negX)
                     if self.args.usegpu:
@@ -258,8 +258,6 @@ class trainTriples():
         if self.args.modelsave == "param":
             path = os.path.join(self.args.modelpath, "{}_ent{}_rel{}.param".format(self.args.modelname, getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
             torch.save(self.model.state_dict(), path)
-            path = os.path.join(self.args.modelpath, "{}_ent{}_rel{}.json".format(self.args.modelname, getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
-            torch.save(self.model.state_dict(), path)
         elif self.args.modelsave == "full":
             path = os.path.join(self.args.modelpath, "{}_ent{}_rel{}.model".format(self.args.modelname, getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
             torch.save(self.model, path)
@@ -290,8 +288,8 @@ class trainTriples():
             '''
             pkl saving type dump a dict containing itos list and weights returned by model
             '''
-            # pklPath = os.path.join(self.args.embedpath, "param_ent{}_rel{}_{}.pkl".format(getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"], self.model))
-            pklPath = os.path.join(self.args.embedpath, "param_ent{}_rel{}_{}.pkl".format(getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
+            pklPath = os.path.join(self.args.embedpath, "param_ent{}_rel{}_{}.pkl".format(getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"], self.model))
+            # pklPath = os.path.join(self.args.embedpath, "param_ent{}_rel{}_{}.pkl".format(getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
             with codecs.open(pklPath, "wb") as fp:
                 pickle.dump({"entlist" : self.entityDict["itos"],
                              "rellist" : self.relationDict["itos"],
@@ -315,7 +313,7 @@ if __name__ == "__main__":
     trainModel.prepareModel()
     print('DEBUG ARGS6')
     # trainModel.loadPretrainEmbedding()
-    trainModel.loadPretrainModel()
+    # trainModel.loadPretrainModel()
     if args.loadembed:
         trainModel.loadPretrainEmbedding()
         print('DEBUG ARG7')

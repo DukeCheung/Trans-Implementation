@@ -12,7 +12,7 @@ class Config():
         self.relpath = "./source/dict/relationDict.json"
         self.embedpath = "./source/embed/"
         self.logpath = "./source/log/"
-        self.savetype = "pkl"
+        self.savetype = "txt"
 
         # Dataloader arguments
         self.batchsize = 1024
@@ -42,7 +42,7 @@ class Config():
                        "C":            0.2}
         self.KG2E   = {"EmbeddingDim": 100,
                        "Margin":       4.0,
-                       "Sim":          "EL",
+                       "Sim":          "KL",
                        "Vmin":         0.03,
                        "Vmax":         3.0}
         self.usegpu = torch.cuda.is_available()
