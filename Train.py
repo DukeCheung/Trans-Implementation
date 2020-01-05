@@ -156,7 +156,7 @@ class trainTriples():
                 self.model.cuda()
 
     def loadPretrainEmbedding(self):
-        if self.args.modelname == "TransE":
+        if self.args.modelname == "KG2E":
             print("INFO : Loading pre-training entity and relation embedding!")
             self.model.initialWeight(entityEmbedFile=self.args.entityfile,
                                      entityDict=self.entityDict["stoi"],
@@ -168,7 +168,7 @@ class trainTriples():
 
     # [TODO]Different models should be considered differently
     def loadPretrainModel(self):
-        if self.args.modelname == "TransE":
+        if self.args.modelname == "KG2E":
             print("INFO : Loading pre-training model.")
             modelType = os.path.splitext(self.args.premodel)[-1]
             if modelType == ".param":
@@ -199,7 +199,7 @@ class trainTriples():
         bestMR = float("inf")
         GLOBALSTEP = 0
         GLOBALEPOCH = 0
-        for seed in range(100):
+        for seed in range(10): # Origin is 100
             print("INFO : Using seed %d" % seed)
             self.dataloader = prepareDataloader(self.args, repSeed=seed, exSeed=seed, headSeed=seed, tailSeed=seed)
             for epoch in range(EPOCHS):
@@ -311,11 +311,13 @@ if __name__ == "__main__":
     print('DEBUG ARGS5')
     trainModel.prepareModel()
     print('DEBUG ARGS6')
+    # trainModel.loadPretrainEmbedding()
+    trainModel.loadPretrainModel()
     if args.loadembed:
         trainModel.loadPretrainEmbedding()
         print('DEBUG ARG7')
     print('DEBUG ARGS8')
     trainModel.fit()
-    print('DEBUG ARGS9')
+    print('Complete')
 
     sumWriter.close()

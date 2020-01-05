@@ -42,7 +42,7 @@ class Config():
                        "C":            0.2}
         self.KG2E   = {"EmbeddingDim": 100,
                        "Margin":       4.0,
-                       "Sim":          "KL",
+                       "Sim":          "EL",
                        "Vmin":         0.03,
                        "Vmax":         3.0}
         self.usegpu = torch.cuda.is_available()
@@ -62,7 +62,8 @@ class Config():
         self.loadembed = False
         self.entityfile = "./source/embed/entityEmbedding.txt"
         self.relationfile = "./source/embed/relationEmbedding.txt"
-        self.premodel = "./source/model/TransE_ent128_rel128.param"
+        self.premodel = "./source/model/KG2E_ent100_rel100.param"
+        # self.premodel = "./source/model/TransE_ent128_rel128.param"
 
         # Other arguments
         self.summarydir = "./source/summary/KG2E_EL/"
