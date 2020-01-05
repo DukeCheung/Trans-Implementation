@@ -258,6 +258,8 @@ class trainTriples():
         if self.args.modelsave == "param":
             path = os.path.join(self.args.modelpath, "{}_ent{}_rel{}.param".format(self.args.modelname, getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
             torch.save(self.model.state_dict(), path)
+            path = os.path.join(self.args.modelpath, "{}_ent{}_rel{}.json".format(self.args.modelname, getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
+            torch.save(self.model.state_dict(), path)
         elif self.args.modelsave == "full":
             path = os.path.join(self.args.modelpath, "{}_ent{}_rel{}.model".format(self.args.modelname, getattr(self.args, self.args.modelname)["EmbeddingDim"], getattr(self.args, self.args.modelname)["EmbeddingDim"]))
             torch.save(self.model, path)
