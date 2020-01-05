@@ -21,12 +21,20 @@ class KG2E(nn.Module):
         # Covars represent the covariance vector of entity and relation
         self.entityEmbedding = nn.Embedding(num_embeddings=entityNum,
                                             embedding_dim=embeddingDim)
+        print('entityEmbedding')
+        print(self.entityEmbedding)
         self.entityCovar = nn.Embedding(num_embeddings=entityNum,
                                         embedding_dim=embeddingDim)
+        print('entityCovar')
+        print(self.entityCovar)
         self.relationEmbedding = nn.Embedding(num_embeddings=relationNum,
                                               embedding_dim=embeddingDim)
+        print('relationEmbedding')
+        print(self.relationEmbedding)
         self.relationCovar = nn.Embedding(num_embeddings=relationNum,
                                           embedding_dim=embeddingDim)
+        print('relationCovar')
+        print(self.relationCovar)
 
     '''
     Calculate the KL loss between T-H distribution and R distribution.
