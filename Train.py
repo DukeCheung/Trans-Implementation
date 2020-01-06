@@ -284,6 +284,27 @@ class trainTriples():
                 fp.write("{} {}\n".format(relationNum, relationDim))
                 for rel, embed in zip(self.relationDict["itos"], relWeight):
                     fp.write("{}\t{}\n".format(rel, ",".join(embed.astype(np.str))))
+            
+            '''
+            save entityCovar & relationCovar -- by Duke
+            '''
+            '''
+            entCovarWeight = self.model.entityCovar.weight.detach().cpu().numpy()
+            relCovarWeight = self.model.relationCovar.weight.detach().cpu().numpy()
+            entityCovarNum, entityCovarDim = entCovarWeight.shape
+            relationCovarNum, relationCovarDim = relCovarWeight.shape
+            entCovarsave = os.path.join(self.args.embedpath, "entityCovar.txt")
+            relCovarsave = os.path.join(self.args.embedpath, "relationCovar.txt")
+            with codecs.open(entCovarsave, "w", encoding="utf-8") as fp:
+                fp.write("{} {}\n".format(entityCovarNum, entityCovarDim))
+                for ent, embed in zip(self.entityDict["itos"], entWeight):
+                    fp.write("{}\t{}\n".format(ent, ",".join(embed.astype(np.str))))
+            with codecs.open(relsave, "w", encoding="utf-8") as fp:
+                fp.write("{} {}\n".format(relationNum, relationDim))
+                for rel, embed in zip(self.relationDict["itos"], relWeight):
+                    fp.write("{}\t{}\n".format(rel, ",".join(embed.astype(np.str))))
+            '''
+                    
         elif self.args.savetype == "pkl":
             '''
             pkl saving type dump a dict containing itos list and weights returned by model
@@ -312,8 +333,8 @@ if __name__ == "__main__":
     print('DEBUG ARGS5')
     trainModel.prepareModel()
     print('DEBUG ARGS6')
-    # trainModel.loadPretrainEmbedding()
-    # trainModel.loadPretrainModel()
+    trainModel.loadPretrainModel()
+    trainModel.loadPretrainEmbedding()
     if args.loadembed:
         trainModel.loadPretrainEmbedding()
         print('DEBUG ARG7')

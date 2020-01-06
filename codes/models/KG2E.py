@@ -72,7 +72,7 @@ class KG2E(nn.Module):
         head, relation, tail = torch.chunk(input=inputTriples,
                                            chunks=3,
                                            dim=1)
-
+        # Embedding(input): extract the tensors of the index in input
         headm = torch.squeeze(self.entityEmbedding(head), dim=1)
         headv = torch.squeeze(self.entityCovar(head), dim=1)
         tailm = torch.squeeze(self.entityEmbedding(tail), dim=1)
@@ -120,3 +120,27 @@ class KG2E(nn.Module):
         negScore = self.scoreOp(negX)
 
         return torch.sum(F.relu(input=posScore-negScore+self.margin)) / size
+    
+    '''
+    Load embeddings -- added by duke
+    '''
+    def initialWeight(self, entityEmbedFile, entityDict, relationEmbedFile, relationDict, fileType="txt"):
+        print("INFO : Loading entity pre-training embedding.")
+        with codecs.open(entityEmbedFile, "r", encoding="utf-8") as fp:
+            _, embDim = fp.readline().strip().split()
+            assert int(embDim) == self.entityEmbedding.weight.size()[-1]
+            for line in fp:
+                ent, embed = line.strip().split("\t")
+                embed = np.array(embed.split(","), dtype=float)
+                if ent in entityDict:
+                    self.entityEmbedding.weight.data[entityDict[ent]].copy_(torch.from_numpy(embed))
+                    
+        print("INFO : Loading relation pre-training embedding.")
+        with codecs.open(relationEmbedFile, "r", encoding="utf-8") as fp:
+            _, embDim = fp.readline().strip().split()
+            assert int(embDim) == self.relationEmbedding.weight.size()[-1]
+            for line in fp:
+                rel, embed = line.strip().split("\t")
+                embed = np.array(embed.split(","), dtype=float)
+                if rel in entityDict:
+                    self.relationEmbedding.weight.data[relationDict[rel]].copy_(torch.from_numpy(embed))
