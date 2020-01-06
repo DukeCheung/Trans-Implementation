@@ -231,8 +231,6 @@ class trainTriples():
                     loss.backward()
                     optimizer.step()
                     
-                    input = torch.LongTensor([[1,2,3,4]])
-                    print(self.model.entityEmbedding(input))
                     # Print infomation and add to summary
                     if minLoss > lossVal:
                         minLoss = lossVal
@@ -336,7 +334,7 @@ if __name__ == "__main__":
     trainModel.prepareModel()
     print('DEBUG ARGS6')
     # trainModel.loadPretrainModel()
-    trainModel.loadPretrainEmbedding()
+    # trainModel.loadPretrainEmbedding()
     if args.loadembed:
         trainModel.loadPretrainEmbedding()
         print('DEBUG ARG7')
