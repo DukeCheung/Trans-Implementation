@@ -47,7 +47,7 @@ class Config():
                        "Vmax":         3.0}
         self.usegpu = torch.cuda.is_available()
         self.gpunum = 0
-        self.modelname = "KG2E"
+        self.modelname = "TransE"
         self.weightdecay = 0
         self.epochs = 5
         self.evalepoch = 1
@@ -58,8 +58,10 @@ class Config():
         self.evalmethod = "MR"
         self.simmeasure = "L2"
         self.modelsave = "param"
+        # self.modelsave = "full"
         self.modelpath = "./source/model/"
-        self.loadembed = False
+        # self.loadembed = False
+        self.loadembed = True
         self.entityfile = "./source/embed/entityEmbedding.txt"
         self.relationfile = "./source/embed/relationEmbedding.txt"
         self.premodel = "./source/model/KG2E_ent100_rel100.param"
