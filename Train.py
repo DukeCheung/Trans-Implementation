@@ -159,8 +159,10 @@ class trainTriples():
         if self.args.modelname == "KG2E":
             print("INFO : Loading pre-training entity and relation embedding!")
             self.model.initialWeight(entityEmbedFile=self.args.entityfile,
+                                     entityCovarFile=self.args.entityCovarFile,
                                      entityDict=self.entityDict["stoi"],
                                      relationEmbedFile=self.args.relationfile,
+                                     relationCovarFile=self.args.relationCovarFile,
                                      relationDict=self.relationDict["stoi"])
         else:
             print("ERROR : Model %s is not supported!"%self.args.modelname)
@@ -199,7 +201,7 @@ class trainTriples():
         bestMR = float("inf")
         GLOBALSTEP = 0
         GLOBALEPOCH = 0
-        for seed in range(2): # Origin is 100
+        for seed in range(100): # Origin is 100
             print("INFO : Using seed %d" % seed)
             self.dataloader = prepareDataloader(self.args, repSeed=seed, exSeed=seed, headSeed=seed, tailSeed=seed)
             for epoch in range(EPOCHS):
@@ -288,7 +290,7 @@ class trainTriples():
             '''
             save entityCovar & relationCovar -- by Duke
             '''
-            '''
+            
             entCovarWeight = self.model.entityCovar.weight.detach().cpu().numpy()
             relCovarWeight = self.model.relationCovar.weight.detach().cpu().numpy()
             entityCovarNum, entityCovarDim = entCovarWeight.shape
@@ -297,13 +299,13 @@ class trainTriples():
             relCovarsave = os.path.join(self.args.embedpath, "relationCovar.txt")
             with codecs.open(entCovarsave, "w", encoding="utf-8") as fp:
                 fp.write("{} {}\n".format(entityCovarNum, entityCovarDim))
-                for ent, embed in zip(self.entityDict["itos"], entWeight):
+                for ent, embed in zip(self.entityDict["itos"], entCovarWeight):
                     fp.write("{}\t{}\n".format(ent, ",".join(embed.astype(np.str))))
-            with codecs.open(relsave, "w", encoding="utf-8") as fp:
-                fp.write("{} {}\n".format(relationNum, relationDim))
-                for rel, embed in zip(self.relationDict["itos"], relWeight):
+            with codecs.open(relCovarsave, "w", encoding="utf-8") as fp:
+                fp.write("{} {}\n".format(relationCovarNum, relationCovarDim))
+                for rel, embed in zip(self.relationDict["itos"], relCovarWeight):
                     fp.write("{}\t{}\n".format(rel, ",".join(embed.astype(np.str))))
-            '''
+            
                     
         elif self.args.savetype == "pkl":
             '''
@@ -333,8 +335,7 @@ if __name__ == "__main__":
     print('DEBUG ARGS5')
     trainModel.prepareModel()
     print('DEBUG ARGS6')
-    trainModel.loadPretrainModel()
-    # trainModel.loadPretrainEmbedding()
+    # trainModel.loadPretrainModel()
     if args.loadembed:
         trainModel.loadPretrainEmbedding()
         print('DEBUG ARG7')

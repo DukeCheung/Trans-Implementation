@@ -21,20 +21,12 @@ class KG2E(nn.Module):
         # Covars represent the covariance vector of entity and relation
         self.entityEmbedding = nn.Embedding(num_embeddings=entityNum,
                                             embedding_dim=embeddingDim)
-        print('entityEmbedding')
-        print(self.entityEmbedding)
         self.entityCovar = nn.Embedding(num_embeddings=entityNum,
                                         embedding_dim=embeddingDim)
-        print('entityCovar')
-        print(self.entityCovar)
         self.relationEmbedding = nn.Embedding(num_embeddings=relationNum,
                                               embedding_dim=embeddingDim)
-        print('relationEmbedding')
-        print(self.relationEmbedding)
         self.relationCovar = nn.Embedding(num_embeddings=relationNum,
                                           embedding_dim=embeddingDim)
-        print('relationCovar')
-        print(self.relationCovar)
 
     '''
     Calculate the KL loss between T-H distribution and R distribution.
@@ -124,7 +116,7 @@ class KG2E(nn.Module):
     '''
     Load embeddings -- added by duke
     '''
-    def initialWeight(self, entityEmbedFile, entityDict, relationEmbedFile, relationDict, fileType="txt"):
+    def initialWeight(self, entityEmbedFile, entityCovarFile, entityDict, relationEmbedFile, relationCovarFile, relationDict, fileType="txt"):
         print("INFO : Loading entity pre-training embedding.")
         with codecs.open(entityEmbedFile, "r", encoding="utf-8") as fp:
             _, embDim = fp.readline().strip().split()
@@ -134,6 +126,17 @@ class KG2E(nn.Module):
                 embed = np.array(embed.split(","), dtype=float)
                 if ent in entityDict:
                     self.entityEmbedding.weight.data[entityDict[ent]].copy_(torch.from_numpy(embed))
+        '''
+        Added by Duke
+        '''
+        with codecs.open(entityCovarFile, "r", encoding="utf-8") as fp:
+            _, embDim = fp.readline().strip().split()
+            assert int(embDim) == self.entityCovar.weight.size()[-1]
+            for line in fp:
+                ent, embed = line.strip().split("\t")
+                embed = np.array(embed.split(","), dtype=float)
+                if ent in entityDict:
+                    self.entityCovar.weight.data[entityDict[ent]].copy_(torch.from_numpy(embed))
                     
         print("INFO : Loading relation pre-training embedding.")
         with codecs.open(relationEmbedFile, "r", encoding="utf-8") as fp:
@@ -144,3 +147,19 @@ class KG2E(nn.Module):
                 embed = np.array(embed.split(","), dtype=float)
                 if rel in entityDict:
                     self.relationEmbedding.weight.data[relationDict[rel]].copy_(torch.from_numpy(embed))
+                    
+        '''
+        Added by Duke
+        '''
+        with codecs.open(relationCovarFile, "r", encoding="utf-8") as fp:
+            _, embDim = fp.readline().strip().split()
+            assert int(embDim) == self.relationCovar.weight.size()[-1]
+            for line in fp:
+                rel, embed = line.strip().split("\t")
+                embed = np.array(embed.split(","), dtype=float)
+                if rel in entityDict:
+                    self.relationCovar.weight.data[relationDict[rel]].copy_(torch.from_numpy(embed))
+                    
+        print(self.entityCovar)
+        input = torch.LongTensor([[1,2]])
+        print(self.entityCovar(input))
