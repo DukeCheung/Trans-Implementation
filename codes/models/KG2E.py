@@ -159,7 +159,3 @@ class KG2E(nn.Module):
                 embed = np.array(embed.split(","), dtype=float)
                 if rel in entityDict:
                     self.relationCovar.weight.data[relationDict[rel]].copy_(torch.from_numpy(embed))
-                    
-        print(self.entityCovar)
-        input = torch.LongTensor([[1,2]])
-        print(self.entityCovar(input))
