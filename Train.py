@@ -335,7 +335,7 @@ if __name__ == "__main__":
     print('DEBUG ARGS5')
     trainModel.prepareModel()
     print('DEBUG ARGS6')
-    # trainModel.loadPretrainModel()
+    trainModel.loadPretrainModel()
     if args.loadembed:
         trainModel.loadPretrainEmbedding()
         print('DEBUG ARG7')
