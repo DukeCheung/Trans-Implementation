@@ -40,11 +40,19 @@ class Config():
                        "L":            2,
                        "Lamb":         0.01,
                        "C":            0.2}
+        '''Origin
         self.KG2E   = {"EmbeddingDim": 100,
                        "Margin":       4.0,
                        "Sim":          "KL",
                        "Vmin":         0.03,
                        "Vmax":         3.0}
+        '''
+        self.KG2E   = {"EmbeddingDim": 100,
+                       "Margin":       4.0,
+                       "Sim":          "KL",
+                       "Vmin":         0.03,
+                       "Vmax":         3.0}
+        
         self.usegpu = torch.cuda.is_available()
         self.gpunum = 0
         self.modelname = "KG2E"
@@ -54,14 +62,15 @@ class Config():
         self.learningrate = 0.01
         self.lrdecay = 0.96
         self.lrdecayepoch = 5
+        # self.optimizer = "Adam" Origin
         self.optimizer = "Adam"
         self.evalmethod = "MR"
         self.simmeasure = "L2"
         self.modelsave = "param"
         # self.modelsave = "full"
         self.modelpath = "./source/model/"
-        # self.loadembed = False
-        self.loadembed = True
+        self.loadembed = False
+        # self.loadembed = True
         self.entityfile = "./source/embed/entityEmbedding.txt"
         self.entityCovarFile = "./source/embed/entityCovar.txt"
         self.relationfile = "./source/embed/relationEmbedding.txt"
@@ -70,7 +79,8 @@ class Config():
         # self.premodel = "./source/model/TransE_ent128_rel128.param"
 
         # Other arguments
-        self.summarydir = "./source/summary/KG2E_EL/"
+        # self.summarydir = "./source/summary/KG2E_EL/"
+        self.summarydir = "./source/summary/KG2E_KL/"
 
         # Check Path
         self.CheckPath()

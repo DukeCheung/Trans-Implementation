@@ -5,6 +5,7 @@ import codecs
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
+import math
 
 class KG2E(nn.Module):
     def __init__(self, entityNum, relationNum, embeddingDim, margin=1.0, sim="KL", vmin=0.03, vmax=3.0):
@@ -36,13 +37,18 @@ class KG2E(nn.Module):
         # Calculate KL(e, r)
         losep1 = torch.sum(kwargs["errorv"]/kwargs["relationv"], dim=1)
         losep2 = torch.sum((kwargs["relationm"]-kwargs["errorm"])**2 / kwargs["relationv"], dim=1)
-        KLer = (losep1 + losep2 - self.ke) / 2
-
+        # losep3 is added by Duke
+        losep3 = torch.sum(torch.log(kwargs["errorv"])-torch.log(kwargs["relationv"]), dim=1)
+        KLer = (losep1 + losep2 - losep3 - self.ke) / 2
+        
+        '''
         # Calculate KL(r, e)
         losep1 = torch.sum(kwargs["relationv"]/kwargs["errorv"], dim=1)
         losep2 = torch.sum((kwargs["errorm"] - kwargs["relationm"]) ** 2 / kwargs["errorv"], dim=1)
         KLre = (losep1 + losep2 - self.ke) / 2
-        return (KLer + KLre) / 2
+        # return (KLer + KLre) / 2
+        '''
+        return KLer
 
     '''
     Calculate the EL loss between T-H distribution and R distribution.
@@ -51,7 +57,10 @@ class KG2E(nn.Module):
     def ELScore(self, **kwargs):
         losep1 = torch.sum((kwargs["errorm"] - kwargs["relationm"]) ** 2 / (kwargs["errorv"] + kwargs["relationv"]), dim=1)
         losep2 = torch.sum(torch.log(kwargs["errorv"]+kwargs["relationv"]), dim=1)
-        return (losep1 + losep2) / 2
+        # losep3 is added by Duke
+        losep3 = math.log(2*math.pi)
+        # return (losep1 + losep2) / 2
+        return (losep1 + losep2 + self.ke*losep3) / 2
 
     '''
     Calculate the score of triples
@@ -71,7 +80,8 @@ class KG2E(nn.Module):
         tailv = torch.squeeze(self.entityCovar(tail), dim=1)
         relationm = torch.squeeze(self.relationEmbedding(relation), dim=1)
         relationv = torch.squeeze(self.relationCovar(relation), dim=1)
-        errorm = tailm - headm
+        # errorm = tailm - headm
+        errorm = headm - tailm
         errorv = tailv + headv
         if self.sim == "KL":
             return self.KLScore(relationm=relationm, relationv=relationv, errorm=errorm, errorv=errorv)
